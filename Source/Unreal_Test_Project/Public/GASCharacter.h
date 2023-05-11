@@ -167,6 +167,9 @@ public:
 
 	FVector CamLineTrace(float TraceRange);
 
+	UFUNCTION(Client, Reliable)
+	void SetSpeedOnClient(float SpeedMultiplier);
+
 protected:
 
 	/** Camera boom positioning the camera behind the character */
@@ -224,6 +227,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|Proyectile")
 	TSubclassOf<UGameplayAbility> GAProyectileClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|DarkTether")
+	TSubclassOf<UGameplayAbility> GADarkTetherClass;
+
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|Proyectile")
@@ -231,6 +237,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|Proyectile")
 	TSubclassOf<class UGameplayEffect> GEProjectileDamageClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|DarkTether")
+	TSubclassOf<class UGameplayEffect> GEDarkTetherSlowDownClass;
 
 protected:
 
@@ -247,5 +256,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combo)
 	int AttackCount = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float BaseSpeed;
 
 };

@@ -47,6 +47,8 @@ AGASCharacter::AGASCharacter()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
+	BaseSpeed = GetCharacterMovement()->MaxWalkSpeed; // Store Base Speed
+
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -179,6 +181,7 @@ void AGASCharacter::PrimaryAttack()
 
 void AGASCharacter::SecondaryAttack()
 {
+	AbilitySystemComponent->TryActivateAbilityByClass(GADarkTetherClass);
 }
 
 void AGASCharacter::QAbility()
@@ -263,6 +266,11 @@ FVector AGASCharacter::CamLineTrace(float TraceRange)
 	return OutHit.bBlockingHit ? OutHit.Location : OutHit.TraceEnd;
 }
 
+void AGASCharacter::SetSpeedOnClient_Implementation(float SpeedMultiplier)
+{
+	GetCharacterMovement()->MaxWalkSpeed = SpeedMultiplier * BaseSpeed;
+}
+
 UAbilitySystemComponent* AGASCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
@@ -286,6 +294,9 @@ void AGASCharacter::OnBaseAttackDamageChangedNative(float BaseAttackDamage, int3
 void AGASCharacter::OnSpeedMultiplierChangedNative(float SpeedMultiplier, int32 StackCount)
 {
 	OnSpeedMultiplierChange(SpeedMultiplier, StackCount);
+
+	GetCharacterMovement()->MaxWalkSpeed = SpeedMultiplier * BaseSpeed;
+	SetSpeedOnClient(SpeedMultiplier);
 }
 
 void AGASCharacter::InitializeAbility(TSubclassOf<UGameplayAbility> AbilityToGet, int32 AbilityLevel)
