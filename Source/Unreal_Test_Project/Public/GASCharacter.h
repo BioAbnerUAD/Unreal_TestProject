@@ -230,7 +230,7 @@ public:
 	TSubclassOf<class ABaseProjectile> BPProjectileClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|Proyectile")
-	TSubclassOf<UGameplayEffect> GEProjectileDamageClass;
+	TSubclassOf<class UGameplayEffect> GEProjectileDamageClass;
 
 protected:
 

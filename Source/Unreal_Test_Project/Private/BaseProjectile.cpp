@@ -55,6 +55,7 @@ void ABaseProjectile::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 																		 const FHitResult& SweepResult)
 {
 	if (GetInstigator() == OtherActor) { return; }
+	if (!EffectSpec) { return; }
 
 	do { // "do while 0" pattern
 		auto TargetCharacter = Cast<AGASCharacter>(OtherActor);
@@ -65,7 +66,7 @@ void ABaseProjectile::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 
 		auto SourceCharacter = Cast<AGASCharacter>(GetInstigator());
 		UAbilitySystemComponent* SourceASComp = SourceCharacter->GetAbilitySystemComponent();
-		
+
 		SourceASComp->ApplyGameplayEffectSpecToTarget(*EffectSpec, TargetASComp);
 	} while (0);
 

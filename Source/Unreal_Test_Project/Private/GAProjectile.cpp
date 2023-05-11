@@ -57,5 +57,5 @@ void UGAProjectile::OnEventRecieved(FGameplayEventData Payload) {
 	} while (0);
 
 	//cleanup
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
 }
