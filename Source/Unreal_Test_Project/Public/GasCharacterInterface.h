@@ -36,5 +36,11 @@ public:
 	void GetManaValuesUI(float& Mana, float& MaxMana);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Ability Interface")
+	class UDAPlayerGameplayAbilities* GetGameplayAbilityData();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Ability Interface")
 	void GetProjectileTransforms(FTransform& SpawnTransforms);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Ability Interface")
+	void SetIsTargeting(bool bIsTargeting);
 };

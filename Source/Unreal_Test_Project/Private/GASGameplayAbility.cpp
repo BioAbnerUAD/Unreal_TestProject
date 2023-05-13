@@ -3,6 +3,21 @@
 
 #include "GASGameplayAbility.h"
 
+void UGASGameplayAbility::EndAbility(const FGameplayAbilitySpecHandle Handle,
+																		 const FGameplayAbilityActorInfo* ActorInfo,
+																		 const FGameplayAbilityActivationInfo ActivationInfo,
+																		 bool bReplicateEndAbility,
+																		 bool bWasCancelled)
+{
+	if (IsEndAbilityValid(Handle, ActorInfo))
+	{
+		Native_OnEndAbility(bWasCancelled);
+	}
+
+	// Call the base implementation
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
 FGameplayAbilityInfo UGASGameplayAbility::GetAbilityInfo()
 {
 	//Store Cost and Cooldown GE Classes in Variables
@@ -48,4 +63,9 @@ FGameplayAbilityInfo UGASGameplayAbility::GetAbilityInfo()
 		//Return Empty if Invalid
 		return FGameplayAbilityInfo();
 	}
+}
+
+void UGASGameplayAbility::Native_OnEndAbility_Implementation(bool bWasCancelled)
+{
+
 }

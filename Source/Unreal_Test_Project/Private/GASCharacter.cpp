@@ -13,6 +13,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/KismetMathLibrary.h"
 
+#include "DAPlayerGameplayAbilities.h"
 #include "GASAttributeSet.h"
 #include "GASAbilitySystemComponent.h"
 
@@ -176,12 +177,22 @@ void AGASCharacter::PunchAttack()
 
 void AGASCharacter::PrimaryAttack()
 {
-	AbilitySystemComponent->TryActivateAbilityByClass(GAProyectileClass);
+	if (bIsTargeting) {
+		AbilitySystemComponent->TargetConfirm();
+	}
+	else {
+		AbilitySystemComponent->TryActivateAbilityByClass(GameplayAbilityData->GAProyectileClass);
+	}
 }
 
 void AGASCharacter::SecondaryAttack()
 {
-	AbilitySystemComponent->TryActivateAbilityByClass(GADarkTetherClass);
+	if (bIsTargeting) {
+		AbilitySystemComponent->TargetCancel();
+	}
+	else {
+		AbilitySystemComponent->TryActivateAbilityByClass(GameplayAbilityData->GADarkTetherClass);
+	}
 }
 
 void AGASCharacter::QAbility()
@@ -190,6 +201,7 @@ void AGASCharacter::QAbility()
 
 void AGASCharacter::EAbility()
 {
+	AbilitySystemComponent->TryActivateAbilityByClass(GameplayAbilityData->GACosmicRiftClass);
 }
 
 void AGASCharacter::RUltimate()
@@ -223,15 +235,15 @@ void AGASCharacter::PlayAttackAnimation() {
 	switch (AttackCount) {
 	case 0:
 		AttackCount = 1;
-		AnimInstance->Montage_Play(PrimaryAttackAMontage);
+		AnimInstance->Montage_Play(GameplayAbilityData->PrimaryAttackAMontage);
 		break;
 	case 1:
 		AttackCount = 2;
-		AnimInstance->Montage_Play(PrimaryAttackBMontage);
+		AnimInstance->Montage_Play(GameplayAbilityData->PrimaryAttackBMontage);
 		break;
 	case 2:
 		AttackCount = 0;
-		AnimInstance->Montage_Play(PrimaryAttackCMontage);
+		AnimInstance->Montage_Play(GameplayAbilityData->PrimaryAttackCMontage);
 		break;
 	}
 }
@@ -264,6 +276,16 @@ FVector AGASCharacter::CamLineTrace(float TraceRange)
 
 	GetWorld()->LineTraceSingleByChannel(OutHit, WorldLocation, Forward * TraceRange + WorldLocation, ECC_Visibility);
 	return OutHit.bBlockingHit ? OutHit.Location : OutHit.TraceEnd;
+}
+
+UDAPlayerGameplayAbilities* AGASCharacter::GetGameplayAbilityData_Implementation()
+{
+	return GameplayAbilityData;
+}
+
+void AGASCharacter::SetIsTargeting_Implementation(bool IsTargeting)
+{
+	bIsTargeting = IsTargeting;
 }
 
 void AGASCharacter::SetSpeedOnClient_Implementation(float SpeedMultiplier)

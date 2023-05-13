@@ -3,11 +3,13 @@
 
 #include "GADarkTether.h"
 
+#include "AbilitySystemInterface.h"
 #include "Abilities/Tasks/AbilityTask_WaitTargetData.h"
 #include "AbilitySystemComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-#include "GASCharacter.h"
+#include "DAPlayerGameplayAbilities.h"
+#include "GasCharacterInterface.h"
 #include "GASTargetActor.h"
 
 void UGADarkTether::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -49,15 +51,18 @@ void UGADarkTether::OnValidData(const FGameplayAbilityTargetDataHandle& Data)
 																						{ GetOwningActorFromActorInfo() }, 
 																						OverlappedActors);
 
+	auto SlowDownEffect = Cast<IGasCharacterInterface>(GetOwningActorFromActorInfo())->
+												GetGameplayAbilityData_Implementation()->GEDarkTetherSlowDownClass;
+
 	for (auto Actor : OverlappedActors) {
-		auto TargetCharacter = Cast<AGASCharacter>(Actor);
+		auto TargetCharacter = Cast<IAbilitySystemInterface>(Actor);
 		if (!TargetCharacter) { break; }
 
 		UAbilitySystemComponent* TargetASComp = TargetCharacter->GetAbilitySystemComponent();
 		if (!TargetASComp) { break; }
 
 		TargetASComp->ApplyGameplayEffectToSelf(
-			TargetCharacter->GEDarkTetherSlowDownClass->GetDefaultObject<UGameplayEffect>(),
+			SlowDownEffect->GetDefaultObject<UGameplayEffect>(),
 			0, 
 			TargetASComp->MakeEffectContext()
 		);

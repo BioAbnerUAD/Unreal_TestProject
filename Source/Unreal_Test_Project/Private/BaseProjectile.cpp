@@ -5,12 +5,11 @@
 #include "BaseProjectile.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystemInterface.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/CollisionProfile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Particles/ParticleSystemComponent.h"
-
-#include "GASCharacter.h"
 
 // Sets default values
 ABaseProjectile::ABaseProjectile()
@@ -58,13 +57,13 @@ void ABaseProjectile::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 	if (!EffectSpec) { return; }
 
 	do { // "do while 0" pattern
-		auto TargetCharacter = Cast<AGASCharacter>(OtherActor);
+		auto TargetCharacter = Cast<IAbilitySystemInterface>(OtherActor);
 		if (!TargetCharacter) { break; }
 
 		UAbilitySystemComponent* TargetASComp = TargetCharacter->GetAbilitySystemComponent();
 		if (!TargetASComp) { break; }
 
-		auto SourceCharacter = Cast<AGASCharacter>(GetInstigator());
+		auto SourceCharacter = Cast<IAbilitySystemInterface>(GetInstigator());
 		UAbilitySystemComponent* SourceASComp = SourceCharacter->GetAbilitySystemComponent();
 
 		SourceASComp->ApplyGameplayEffectSpecToTarget(*EffectSpec, TargetASComp);

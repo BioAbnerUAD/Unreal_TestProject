@@ -17,7 +17,16 @@ class UNREAL_TEST_PROJECT_API UGASGameplayAbility : public UGameplayAbility
 
 public:
 
+	void EndAbility(const FGameplayAbilitySpecHandle Handle,
+									const FGameplayAbilityActorInfo* ActorInfo,
+									const FGameplayAbilityActivationInfo ActivationInfo,
+									bool bReplicateEndAbility,
+									bool bWasCancelled) override;
+
 	UFUNCTION(BlueprintCallable, Category = "GASGameplayAbility")
 	FGameplayAbilityInfo GetAbilityInfo();
+
+	UFUNCTION(BlueprintNativeEvent, Category = "GASGameplayAbility")
+	void Native_OnEndAbility(bool bWasCancelled);
 	
 };

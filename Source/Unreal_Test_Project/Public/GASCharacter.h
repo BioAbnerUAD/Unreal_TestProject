@@ -165,7 +165,11 @@ public:
 
 	void GetProjectileTransforms_Implementation(FTransform& SpawnTransforms) override;
 
+	class UDAPlayerGameplayAbilities* GetGameplayAbilityData_Implementation() override;
+
 	FVector CamLineTrace(float TraceRange);
+
+	void SetIsTargeting_Implementation(bool bIsTargeting) override;
 
 	UFUNCTION(Client, Reliable)
 	void SetSpeedOnClient(float SpeedMultiplier);
@@ -211,37 +215,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* RUltimateAction;
 
-public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations")
-	UAnimMontage* PrimaryAttackAMontage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations")
-	UAnimMontage* PrimaryAttackBMontage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animations")
-	UAnimMontage* PrimaryAttackCMontage;
-
 protected:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|Proyectile")
-	TSubclassOf<UGameplayAbility> GAProyectileClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|DarkTether")
-	TSubclassOf<UGameplayAbility> GADarkTetherClass;
-
-public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|Proyectile")
-	TSubclassOf<class ABaseProjectile> BPProjectileClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|Proyectile")
-	TSubclassOf<class UGameplayEffect> GEProjectileDamageClass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay Ability|DarkTether")
-	TSubclassOf<class UGameplayEffect> GEDarkTetherSlowDownClass;
-
-protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GASGameplayAbility")
+	class UDAPlayerGameplayAbilities* GameplayAbilityData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UBasePlayerUI> PlayerUIClass;
@@ -259,5 +236,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float BaseSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool bIsTargeting;
 
 };

@@ -8,7 +8,8 @@
 #include "AbilitySystemComponent.h"
 
 #include "BaseProjectile.h"
-#include "GASCharacter.h"
+#include "DAPlayerGameplayAbilities.h"
+#include "GasCharacterInterface.h"
 
 void UGAProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 																	  const FGameplayAbilityActorInfo* ActorInfo,
@@ -17,10 +18,10 @@ void UGAProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	auto Owner = Cast<AGASCharacter>(ActorInfo->OwnerActor.Get());
+	auto Owner = Cast<IGasCharacterInterface>(ActorInfo->OwnerActor.Get());
 
 	UAbilitySystemComponent* AbilityComponent = ActorInfo->AbilitySystemComponent.Get();
-	UAnimMontage* Montage = Owner->PrimaryAttackAMontage;
+	UAnimMontage* Montage = Owner->GetGameplayAbilityData_Implementation()->PrimaryAttackAMontage;
 
 	auto MontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, Montage);
 	MontageTask->OnCompleted.AddDynamic(this, &UGAProjectile::OnCompleted);
@@ -41,7 +42,7 @@ void UGAProjectile::OnCompleted() {
 }
 
 void UGAProjectile::OnEventRecieved(FGameplayEventData Payload) {
-	auto Owner = Cast<AGASCharacter>(GetOwningActorFromActorInfo());
+	auto Owner = Cast<IGasCharacterInterface>(GetOwningActorFromActorInfo());
 
 	do { // "do while 0" pattern
 		if (!HasAuthority(&CurrentActivationInfo)) { break; }
@@ -49,11 +50,14 @@ void UGAProjectile::OnEventRecieved(FGameplayEventData Payload) {
 		FTransform ProjectileTransform;
 		Owner->GetProjectileTransforms_Implementation(ProjectileTransform);
 
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		SpawnParams.Instigator = Owner;
-		auto Projectile = GetWorld()->SpawnActor<ABaseProjectile>(Owner->BPProjectileClass, ProjectileTransform, SpawnParams);
-		Projectile->EffectSpec = MakeOutgoingGameplayEffectSpec(Owner->GEProjectileDamageClass).Data;
+		if (auto Projectile = GetWorld()->SpawnActor<ABaseProjectile>(Owner->GetGameplayAbilityData_Implementation()->BPProjectileClass, ProjectileTransform)) {
+
+			Projectile->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			Projectile->SetInstigator(Cast<APawn>(Owner));
+			Projectile->EffectSpec = MakeOutgoingGameplayEffectSpec(Owner->GetGameplayAbilityData_Implementation()->GEProjectileDamageClass).Data;
+
+			Projectile->FinishSpawning(ProjectileTransform);
+		}
 	} while (0);
 
 	//cleanup
