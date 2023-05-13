@@ -197,6 +197,7 @@ void AGASCharacter::SecondaryAttack()
 
 void AGASCharacter::QAbility()
 {
+	AbilitySystemComponent->TryActivateAbilityByClass(GameplayAbilityData->GATornSpaceClass);
 }
 
 void AGASCharacter::EAbility()

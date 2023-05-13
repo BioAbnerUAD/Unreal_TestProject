@@ -38,7 +38,7 @@ void UGACosmicRift::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	WaitTask->ValidData.AddDynamic(this, &UGACosmicRift::OnValidData);
 	WaitTask->Cancelled.AddDynamic(this, &UGACosmicRift::OnCancelled);
 
-	WaitTask->Activate();
+	WaitTask->ReadyForActivation();
 }
 
 void UGACosmicRift::OnValidData(const FGameplayAbilityTargetDataHandle& Data)
@@ -48,7 +48,7 @@ void UGACosmicRift::OnValidData(const FGameplayAbilityTargetDataHandle& Data)
 	do {
 		if (!HasAuthority(&CurrentActivationInfo)) { break; }
 
-		auto HitResult = Data.Data[0].Get()->GetHitResult();
+		auto HitResult = Data.Data[0]->GetHitResult();
 		if (!HitResult->bBlockingHit) {
 			UKismetSystemLibrary::PrintString(GetWorld(), "Invalid Target");
 			break; 

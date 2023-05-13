@@ -32,7 +32,7 @@ void UGADarkTether::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	WaitTask->ValidData.AddDynamic(this, &UGADarkTether::OnValidData);
 	WaitTask->Cancelled.AddDynamic(this, &UGADarkTether::OnCancelled);
 
-	WaitTask->Activate();
+	WaitTask->ReadyForActivation();
 }
 
 void UGADarkTether::OnValidData(const FGameplayAbilityTargetDataHandle& Data)

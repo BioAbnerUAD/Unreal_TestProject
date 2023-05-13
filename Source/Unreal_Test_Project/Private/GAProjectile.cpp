@@ -33,8 +33,8 @@ void UGAProjectile::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	auto EventTask = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, EventTag);
 	EventTask->EventReceived.AddDynamic(this, &UGAProjectile::OnEventRecieved);
 
-	MontageTask->Activate();
-	EventTask->Activate();
+	MontageTask->ReadyForActivation();
+	EventTask->ReadyForActivation();
 }
 
 void UGAProjectile::OnCompleted() {

@@ -51,5 +51,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CosmicRift")
 	TSubclassOf<class UGameplayEffect> GEMeteorDamageClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TornSpace")
+	TSubclassOf<class UGameplayAbility> GATornSpaceClass;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TornSpace")
+	TSubclassOf<class AGameplayAbilityWorldReticle> GARetTornSpaceClass;
 	
 };
