@@ -57,5 +57,14 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TornSpace")
 	TSubclassOf<class AGameplayAbilityWorldReticle> GARetTornSpaceClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ultimate")
+	TSubclassOf<class UGameplayAbility> GAUltimateClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ultimate")
+	TSubclassOf<class ABaseUltimate> BPUltimateClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ultimate")
+	TSubclassOf<class UGameplayEffect> GEUltimateDamageClass;
 	
 };

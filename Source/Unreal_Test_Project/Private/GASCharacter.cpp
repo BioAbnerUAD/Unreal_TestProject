@@ -207,6 +207,7 @@ void AGASCharacter::EAbility()
 
 void AGASCharacter::RUltimate()
 {
+	AbilitySystemComponent->TryActivateAbilityByClass(GameplayAbilityData->GAUltimateClass);
 }
 
 void AGASCharacter::TriggerSaveAttack_Implementation()

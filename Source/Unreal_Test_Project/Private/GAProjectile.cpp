@@ -50,7 +50,7 @@ void UGAProjectile::OnEventRecieved(FGameplayEventData Payload) {
 		FTransform ProjectileTransform;
 		Owner->GetProjectileTransforms_Implementation(ProjectileTransform);
 
-		if (auto Projectile = GetWorld()->SpawnActor<ABaseProjectile>(Owner->GetGameplayAbilityData_Implementation()->BPProjectileClass, ProjectileTransform)) {
+		if (auto Projectile = GetWorld()->SpawnActorDeferred<ABaseProjectile>(Owner->GetGameplayAbilityData_Implementation()->BPProjectileClass, ProjectileTransform)) {
 
 			Projectile->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 			Projectile->SetInstigator(Cast<APawn>(Owner));
